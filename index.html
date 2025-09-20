@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -61,5 +60,93 @@
          </div>
          <script src="https://szvy.lol/szvy/bundle.js" defer></script>
          <script src="https://szvy.lol/szvy/config.js?cdn" defer></script>
+          <script>
+            document.addEventListener("DOMContentLoaded", async function () {
+              console.log(`
+              /$$$$$$$ /$$$$$$$$ /$$    /$$ /$$   /$$
+             /$$_____/|____ /$$/|  $$  /$$/| $$  | $$
+            |  $$$$$$    /$$$$/  \\  $$/$$/ | $$  | $$
+             \\____  $$  /$$__/    \\  $$$/  | $$  | $$
+             /$$$$$$$/ /$$$$$$$$   \\  $/   |  $$$$$$$
+            |_______/ |________/    \\_/     \\____  $$
+                                            /$$  | $$
+                                           |  $$$$$$/
+                                            \\______/
+            `);
+          
+              if ('serviceWorker' in navigator) {
+                try {
+                  await navigator.serviceWorker.register("/szvy/sw.js", { scope: "/szvy/" });
+                } catch (error) {
+                  console.error("sw couldnt register:", error);
+                }
+              }
+          
+              const form = document.querySelector("#uv-form");
+              const input = document.querySelector("#uv-address");
+          
+              form.addEventListener("submit", (event) => {
+                event.preventDefault();
+                let url = input.value.trim();
+                if (!isUrl(url)) {
+                  url = "https://duckduckgo.com/&q%3D" + encodeURIComponent(url);
+                } else if (!(url.startsWith("https://") || url.startsWith("http://"))) {
+                  url = "http://" + url;
+                }
+                const encodedUrl = __uv$config.prefix + __uv$config.encodeUrl(url);
+                window.location.href = "math.html?u=" + (encodedUrl);
+              });
+          
+              loadCustomLinks();
+            });
+          
+            function isUrl(val = "") {
+              return /^http(s?):\/\//.test(val) || (val.includes(".") && val.slice(0, 1) !== " ");
+            }
+          
+            function loadCustomLinks() {
+              var quicklinkContainer = document.getElementById('quicklink-container');
+              var savedLinks = JSON.parse(localStorage.getItem('customLinks')) || [];
+              savedLinks.forEach(function(link) {
+                addCustomLinkToUI(link.url, link.image, link.name);
+              });
+            }
+          
+            function addCustomLinkToUI(customUrl, customImage, customName) {
+              var quicklinkContainer = document.getElementById('quicklink-container');
+              var newQuicklink = document.createElement('a');
+              newQuicklink.className = 'quicklink-button';
+              newQuicklink.href = 'embed.html#' + customUrl;
+              newQuicklink.innerHTML = '<img src="' + customImage + '" alt="' + customName + '"><p>' + customName + '</p>';
+              quicklinkContainer.insertBefore(newQuicklink, document.getElementById('custom-site-container'));
+            }
+          
+            document.getElementById('custom-site-container').addEventListener('click', function() {
+              var customUrl = prompt("Enter the URL (https required):");
+              if (!customUrl) {
+                alert("url is required!!");
+                return;
+              }
+              var customImage = prompt("Enter the image URL for the site:");
+              if (!customImage) {
+                alert("image url is required!!");
+                return;
+              }
+              var customName = prompt("Enter the name for the site:");
+              if (!customName) {
+                alert("site name is required!!");
+                return;
+              }
+              var newLink = {
+                url: customUrl,
+                image: customImage,
+                name: customName
+              };
+              var savedLinks = JSON.parse(localStorage.getItem('customLinks')) || [];
+              savedLinks.push(newLink);
+              localStorage.setItem('customLinks', JSON.stringify(savedLinks));
+              addCustomLinkToUI(customUrl, customImage, customName);
+            });
+          </script>
 </body>
 </html>
