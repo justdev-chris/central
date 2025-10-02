@@ -6,18 +6,33 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
     :root {
-      --main-bg: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);
+      --main-bg-light: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);
+      --main-bg-dark: linear-gradient(135deg, #232526 0%, #414345 100%);
       --accent: #ffd700;
       --secondary: #222;
       --shadow: 0 4px 24px #0002;
       --hover: #fafafa;
+      --glass-bg-light: rgba(255,255,255,0.85);
+      --glass-bg-dark: rgba(34,34,34,0.8);
+      --text-light: #222;
+      --text-dark: #fafafa;
+      --card-border-light: #8ec5fc;
+      --card-border-dark: #ffd700;
+    }
+    html {
+      transition: background 0.3s;
     }
     body {
       margin: 0;
       font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
-      background: var(--main-bg);
-      color: #222;
+      background: var(--main-bg-light);
+      color: var(--text-light);
       min-height: 100vh;
+      transition: background 0.3s, color 0.3s;
+    }
+    body.dark-mode {
+      background: var(--main-bg-dark);
+      color: var(--text-dark);
     }
     header {
       background: rgba(34,34,34,0.95);
@@ -70,16 +85,39 @@
       background: var(--accent);
       color: var(--secondary);
     }
+    #dark-toggle {
+      position: absolute;
+      top: 20px;
+      right: 32px;
+      background: var(--accent);
+      color: #222;
+      border: none;
+      padding: 0.5em 1em;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 1.1rem;
+      cursor: pointer;
+      box-shadow: 0 2px 8px #8ec5fc40;
+      transition: background 0.2s, color 0.2s;
+    }
+    #dark-toggle:hover {
+      background: #ffe066;
+    }
     section {
       max-width: 1000px;
       margin: 2.5rem auto;
-      background: #fff;
+      background: var(--glass-bg-light);
+      backdrop-filter: blur(12px);
       padding: 2.2rem 2rem;
       border-radius: 18px;
       box-shadow: var(--shadow);
       position: relative;
       z-index: 2;
-      transition: box-shadow 0.2s;
+      transition: box-shadow 0.2s, background 0.3s;
+    }
+    body.dark-mode section {
+      background: var(--glass-bg-dark);
+      color: var(--text-dark);
     }
     section:hover {
       box-shadow: 0 8px 32px #8ec5fc55;
@@ -89,6 +127,10 @@
       font-size: 2rem;
       margin-top: 0;
       text-shadow: 0 1px 6px #e0c3fc55;
+    }
+    body.dark-mode h2 {
+      color: #ffd700;
+      text-shadow: 0 1px 6px #ffd70080;
     }
     /* Projects as cards */
     .project-cards {
@@ -105,14 +147,26 @@
       display: flex;
       flex-direction: column;
       align-items: flex-start;
-      transition: transform 0.12s, box-shadow 0.12s;
-      border-left: 6px solid #8ec5fc;
+      transition: transform 0.12s, box-shadow 0.12s, background 0.3s, border-left 0.2s;
+      border-left: 6px solid var(--card-border-light);
       border-bottom: 2px solid #ffd70022;
+      position: relative;
+      overflow: hidden;
     }
     .card:hover {
       transform: translateY(-6px) scale(1.03);
       box-shadow: 0 8px 32px #8ec5fc55;
       border-left: 6px solid var(--accent);
+      background: linear-gradient(120deg, #e0c3fc 70%, #fafafa 100%);
+    }
+    body.dark-mode .card {
+      background: linear-gradient(120deg, #232526 70%, #414345 100%);
+      color: #fafafa;
+      border-left: 6px solid var(--card-border-dark);
+    }
+    body.dark-mode .card:hover {
+      background: linear-gradient(120deg, #414345 70%, #232526 100%);
+      border-left: 6px solid #8ec5fc;
     }
     .card h3 {
       margin: 0 0 0.45rem 0;
@@ -120,11 +174,19 @@
       color: #222;
       font-weight: 700;
       letter-spacing: 0.03em;
+      text-shadow: 0 1px 4px #8ec5fc22;
+    }
+    body.dark-mode .card h3 {
+      color: #ffd700;
+      text-shadow: 0 1px 4px #ffd70033;
     }
     .card p {
       margin: 0 0 0.7rem 0;
       font-size: 1.05rem;
       color: #444;
+    }
+    body.dark-mode .card p {
+      color: #ddd;
     }
     .card-links a {
       margin-right: 1.3em;
@@ -136,6 +198,9 @@
     }
     .card-links a:hover {
       color: var(--accent);
+    }
+    body.dark-mode .card-links a {
+      color: #ffd700;
     }
     /* Changelog */
     .changelog ul {
@@ -156,14 +221,28 @@
       margin-bottom: 1.2rem;
       box-shadow: 0 2px 12px #ffd70012;
       font-size: 1.09rem;
+      transition: background 0.3s;
+    }
+    body.dark-mode .prob-games {
+      background: linear-gradient(110deg, #232526 70%, #ffd70022 100%);
+      color: #ffd700;
     }
     /* Badges */
     .badge {
-      margin-right: 0.8rem;
-      vertical-align: middle;
-      filter: drop-shadow(0 2px 9px #8ec5fc99);
-      border-radius: 6px;
-      margin-bottom: 0.5em;
+      display: inline-block;
+      background: #e0c3fc;
+      color: #222;
+      border-radius: 8px;
+      padding: 0.4em 1em;
+      font-weight: bold;
+      margin-right: 0.6em;
+      font-size: 1.2em;
+      box-shadow: 0 2px 8px #8ec5fc55;
+      transition: background 0.3s, color 0.3s;
+    }
+    body.dark-mode .badge {
+      background: #414345;
+      color: #ffd700;
     }
     /* Usage */
     pre {
@@ -174,9 +253,68 @@
       font-family: 'Fira Mono', 'Consolas', monospace;
       margin: 0.5em 0 1em 0;
       box-shadow: 0 1px 8px #8ec5fc22;
+      color: #222;
+      transition: background 0.3s, color 0.3s;
     }
-    /* Contrib/Activity/Roadmap */
-    .contrib, .faq, .roadmap { margin-bottom: 1.5rem; }
+    body.dark-mode pre {
+      background: #232526c0;
+      color: #ffd700;
+    }
+    /* Contact/Socials */
+    .contact-socials {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      align-items: center;
+      margin-top: 1.5rem;
+    }
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      font-size: 1.1rem;
+      background: #f8f9fa;
+      padding: 0.7em 1.3em;
+      border-radius: 12px;
+      box-shadow: 0 1px 8px #8ec5fc22;
+      transition: background 0.3s, color 0.3s;
+      color: #1976d2;
+      font-weight: 500;
+    }
+    body.dark-mode .contact-item {
+      background: #232526;
+      color: #ffd700;
+    }
+    .contact-item svg {
+      width: 23px;
+      height: 23px;
+      vertical-align: middle;
+      fill: #8ec5fc;
+      transition: fill 0.3s;
+    }
+    body.dark-mode .contact-item svg {
+      fill: #ffd700;
+    }
+    .contact-item a {
+      color: inherit;
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.2s;
+    }
+    .contact-item a:hover {
+      text-decoration: underline;
+      color: var(--accent);
+    }
+    #stats {
+      margin-top: 1.5em;
+      text-align: center;
+      font-size: 1.15em;
+      color: #1976d2;
+      font-weight: 600;
+    }
+    body.dark-mode #stats {
+      color: #ffd700;
+    }
     footer {
       text-align: center;
       padding: 2rem 0;
@@ -188,30 +326,37 @@
       border-top-left-radius: 1.2rem;
       border-top-right-radius: 1.2rem;
       box-shadow: 0 -2px 12px #8ec5fc22;
+      transition: background 0.3s, color 0.3s;
+    }
+    body.dark-mode footer {
+      background: rgba(34,34,34,0.94);
+      color: #ffd700;
+      border-top: 1px solid #ffd70066;
     }
     @media (max-width: 850px) {
       section { padding: 1.3rem 0.5rem; }
       .project-cards { gap: 1rem; }
+      .contact-socials { gap: 1rem; }
     }
     @media (max-width: 600px) {
       header h1 { font-size: 1.6rem; }
       h2 { font-size: 1.2rem; }
       .project-cards { grid-template-columns: 1fr; }
+      .contact-socials { flex-direction: column; gap: 0.7rem; }
     }
   </style>
 </head>
 <body>
   <header>
-    <h1>Central Hub</h1>
+    <h1>Central</h1>
     <div class="alias">by <a href="https://github.com/justdev-chris" style="color:#ffd700;">justdev-chris</a> 🐾</div>
     <nav>
       <a href="#projects">Projects</a>
       <a href="#changelog">Changelog</a>
       <a href="#prob-games">Prob Games</a>
       <a href="#usage">Usage</a>
-      <a href="#contrib">Contributors</a>
-      <a href="#activity">Activity</a>
-      <a href="#roadmap">Roadmap / FAQ</a>
+      <a href="#contact">Contact / Socials</a>
+      <a id="dark-toggle" onclick="toggleDarkMode()">🌙 Dark Mode</a>
     </nav>
   </header>
 
@@ -270,7 +415,7 @@
   <section id="changelog" class="changelog">
     <h2>📝 Changelog</h2>
     <ul>
-      <li><strong>2025-09-13:</strong> Ultimate Cat Clicker: Last update (see repo for details).</li>
+      <li><strong>2025-09-13:</strong> UCC v3 is out! (Ultimate Cat Clicker latest update)</li>
       <li><strong>2025-08-29:</strong> P2E: Last update (see repo for details).</li>
       <li><strong>2025-08-12:</strong> BAT-TO-EXE Converter: Last update (see repo for details).</li>
       <li><strong>2025-09-06:</strong> TransferNest: Last update (see repo for details).</li>
@@ -297,6 +442,16 @@
     <img class="badge" src="https://img.shields.io/badge/last--update-2025--10--02-lightgrey" alt="Last Update">
   </section>
 
+  <section id="stats">
+    <h2>👥 Live Stats</h2>
+    <div>
+      <span class="badge" id="user-count">...</span>
+      <span>Live users</span> |
+      <span class="badge" id="views-count">...</span>
+      <span>Total visits</span>
+    </div>
+  </section>
+
   <section id="usage">
     <h2>🛠️ Usage Instructions</h2>
     <p>Clone the repo and explore each project:</p>
@@ -305,33 +460,17 @@ cd central</pre>
     <p>See individual folders for setup and run instructions.</p>
   </section>
 
-  <section id="contrib" class="contrib">
-    <h2>🤝 Contributors</h2>
-    <p>Open to pull requests, game ideas, or improvements!<br>
-    See <code>CONTRIBUTING.md</code> for guidelines.</p>
-  </section>
-
-  <section id="activity">
-    <h2>🕵️ Recent Activity</h2>
-    <ul>
-      <li>Watch this repo and my others for updates!</li>
-      <li>Check the <a href="https://github.com/justdev-chris" target="_blank">justdev-chris profile</a> for news and releases.</li>
-    </ul>
-  </section>
-
-  <section id="roadmap" class="roadmap">
-    <h2>🗺️ Roadmap & FAQ</h2>
-    <ul>
-      <li><strong>Roadmap:</strong> Add more games, automate changelog updates, integrate dashboards.</li>
-    </ul>
-    <div class="faq">
-      <strong>FAQ:</strong>
-      <ul>
-        <li><strong>Q:</strong> How do I suggest a new project?<br>
-            <strong>A:</strong> Open an issue or join discussions!</li>
-        <li><strong>Q:</strong> Can I contribute to the games?<br>
-            <strong>A:</strong> Absolutely, PRs welcome!</li>
-      </ul>
+  <section id="contact">
+    <h2>📬 Contact / Socials</h2>
+    <div class="contact-socials">
+      <div class="contact-item">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12c0 4.84 3.84 8.82 8.67 9.76.63.12.86-.27.86-.61 0-.3-.01-1.09-.02-2.14-3.53.77-4.27-1.7-4.27-1.7-.57-1.44-1.39-1.82-1.39-1.82-1.14-.78.09-.77.09-.77 1.26.09 1.92 1.3 1.92 1.3 1.12 1.92 2.93 1.37 3.64 1.05.11-.81.44-1.37.8-1.68-2.83-.32-5.81-1.42-5.81-6.35 0-1.4.5-2.54 1.31-3.44-.13-.32-.57-1.6.12-3.34 0 0 1.08-.35 3.52 1.32a12.25 12.25 0 0 1 3.21-.43c1.09.01 2.19.15 3.21.43 2.43-1.67 3.51-1.32 3.51-1.32.69 1.74.25 3.02.12 3.34.82.9 1.31 2.04 1.31 3.44 0 4.94-2.98 6.02-5.82 6.35.45.38.85 1.13.85 2.28 0 1.65-.02 2.98-.02 3.38 0 .34.23.74.87.61C20.16 20.82 24 16.84 24 12c0-5.52-4.48-10-10-10z"/></svg>
+        <a href="https://github.com/justdev-chris" target="_blank">GitHub</a>
+      </div>
+      <div class="contact-item">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#ffd700"/><text x="12" y="16" text-anchor="middle" font-size="12" fill="#222" font-family="Arial">🌐</text></svg>
+        <a href="https://catsdevs.online/" target="_blank">catsdevs.online</a>
+      </div>
     </div>
   </section>
 
@@ -339,5 +478,28 @@ cd central</pre>
     Made with 💻 by <strong>justdev-chris</strong><br>
     Building cool stuff since 2025
   </footer>
+  <script>
+    function toggleDarkMode() {
+      document.body.classList.toggle('dark-mode');
+      let toggleBtn = document.getElementById('dark-toggle');
+      if(document.body.classList.contains('dark-mode')) {
+        toggleBtn.innerText = "☀️ Light Mode";
+      } else {
+        toggleBtn.innerText = "🌙 Dark Mode";
+      }
+    }
+    async function updateStats() {
+      try {
+        const res = await fetch('/api/stats');
+        const data = await res.json();
+        document.getElementById('user-count').innerText = data.liveUsers;
+        document.getElementById('views-count').innerText = data.pageviews;
+      } catch (e) {
+        document.getElementById('user-count').innerText = 'N/A';
+        document.getElementById('views-count').innerText = 'N/A';
+      }
+    }
+    updateStats();
+  </script>
 </body>
 </html>
