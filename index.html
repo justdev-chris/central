@@ -5,31 +5,204 @@
   <title>Central Hub — justdev-chris</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
-    body { font-family: 'Segoe UI', Arial, sans-serif; background: #f8f9fa; margin: 0; color: #222; }
-    header { background: #222; color: #fafafa; padding: 2rem 1rem; text-align: center; }
-    header h1 { margin: 0; font-size: 2.5rem; }
-    .alias { font-size: 1.2rem; color: #e2b007; }
-    nav { margin: 1.5rem 0 2rem 0; text-align: center; }
-    nav a { margin: 0 1rem; color: #1976d2; text-decoration: none; font-weight: bold; }
-    section { max-width: 900px; margin: 2rem auto; background: #fff; padding: 2rem; border-radius: 10px; box-shadow: 0 2px 8px #0001; }
-    h2 { color: #1976d2; margin-top: 0; }
-    .projects table { width: 100%; border-collapse: collapse; margin-bottom: 1rem; }
-    .projects th, .projects td { padding: 0.7rem; border-bottom: 1px solid #eee; text-align: left; }
-    .projects th { background: #f1f5fc; }
-    .badge { margin-right: 0.7rem; vertical-align: middle; }
-    .changelog ul { margin: 0; padding-left: 1.3rem; }
-    .prob-games { background: #fffbe6; border-left: 5px solid #ffb300; padding: 1rem; border-radius: 6px; margin-bottom: 1rem; }
+    :root {
+      --main-bg: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);
+      --accent: #ffd700;
+      --secondary: #222;
+      --shadow: 0 4px 24px #0002;
+      --hover: #fafafa;
+    }
+    body {
+      margin: 0;
+      font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+      background: var(--main-bg);
+      color: #222;
+      min-height: 100vh;
+    }
+    header {
+      background: rgba(34,34,34,0.95);
+      color: #fafafa;
+      padding: 2rem 1rem 1rem 1rem;
+      text-align: center;
+      box-shadow: var(--shadow);
+      border-bottom-left-radius: 2rem;
+      border-bottom-right-radius: 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+    header::after {
+      content: "";
+      display: block;
+      position: absolute;
+      left: 0; right: 0; bottom: 0;
+      height: 10px;
+      background: var(--accent);
+      opacity: 0.5;
+    }
+    header h1 {
+      font-size: 2.8rem;
+      margin: 0 0 0.5rem 0;
+      letter-spacing: 0.07em;
+      text-shadow: 0 2px 10px #3333;
+    }
+    .alias {
+      font-size: 1.2rem;
+      color: var(--accent);
+      margin-bottom: 0.5rem;
+      font-weight: bold;
+      letter-spacing: 0.05em;
+    }
+    nav {
+      margin: 1rem 0 0.5rem 0;
+    }
+    nav a {
+      display: inline-block;
+      margin: 0 0.7rem;
+      color: #8ec5fc;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1.1rem;
+      border-radius: 8px;
+      padding: 0.3em 0.6em;
+      transition: background 0.2s, color 0.2s;
+    }
+    nav a:hover {
+      background: var(--accent);
+      color: var(--secondary);
+    }
+    section {
+      max-width: 1000px;
+      margin: 2.5rem auto;
+      background: #fff;
+      padding: 2.2rem 2rem;
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+      position: relative;
+      z-index: 2;
+      transition: box-shadow 0.2s;
+    }
+    section:hover {
+      box-shadow: 0 8px 32px #8ec5fc55;
+    }
+    h2 {
+      color: #8ec5fc;
+      font-size: 2rem;
+      margin-top: 0;
+      text-shadow: 0 1px 6px #e0c3fc55;
+    }
+    /* Projects as cards */
+    .project-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(285px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+    .card {
+      background: linear-gradient(120deg, #fafafa 70%, #e0c3fc 100%);
+      border-radius: 14px;
+      box-shadow: 0 2px 16px #8ec5fc33;
+      padding: 1.3rem 1rem 1.1rem 1rem;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      transition: transform 0.12s, box-shadow 0.12s;
+      border-left: 6px solid #8ec5fc;
+      border-bottom: 2px solid #ffd70022;
+    }
+    .card:hover {
+      transform: translateY(-6px) scale(1.03);
+      box-shadow: 0 8px 32px #8ec5fc55;
+      border-left: 6px solid var(--accent);
+    }
+    .card h3 {
+      margin: 0 0 0.45rem 0;
+      font-size: 1.3rem;
+      color: #222;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+    }
+    .card p {
+      margin: 0 0 0.7rem 0;
+      font-size: 1.05rem;
+      color: #444;
+    }
+    .card-links a {
+      margin-right: 1.3em;
+      color: #1976d2;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1rem;
+      transition: color 0.18s;
+    }
+    .card-links a:hover {
+      color: var(--accent);
+    }
+    /* Changelog */
+    .changelog ul {
+      margin: 0;
+      padding-left: 1.5rem;
+      font-size: 1.1rem;
+    }
+    .changelog li {
+      margin-bottom: 0.6em;
+      padding-left: 0.1em;
+    }
+    /* Prob Games */
+    .prob-games {
+      background: linear-gradient(110deg, #fffbe6 70%, #ffd70022 100%);
+      border-left: 7px solid var(--accent);
+      padding: 1.3rem;
+      border-radius: 10px;
+      margin-bottom: 1.2rem;
+      box-shadow: 0 2px 12px #ffd70012;
+      font-size: 1.09rem;
+    }
+    /* Badges */
+    .badge {
+      margin-right: 0.8rem;
+      vertical-align: middle;
+      filter: drop-shadow(0 2px 9px #8ec5fc99);
+      border-radius: 6px;
+      margin-bottom: 0.5em;
+    }
+    /* Usage */
+    pre {
+      background: #8ec5fc18;
+      border-radius: 8px;
+      padding: 0.7em 1em;
+      font-size: 1.06em;
+      font-family: 'Fira Mono', 'Consolas', monospace;
+      margin: 0.5em 0 1em 0;
+      box-shadow: 0 1px 8px #8ec5fc22;
+    }
+    /* Contrib/Activity/Roadmap */
     .contrib, .faq, .roadmap { margin-bottom: 1.5rem; }
-    footer { text-align: center; padding: 2rem 0; color: #777; font-size: 1.1rem; }
+    footer {
+      text-align: center;
+      padding: 2rem 0;
+      color: #777;
+      font-size: 1.1rem;
+      background: rgba(255,255,255,0.84);
+      border-top: 1px solid #e0c3fc;
+      margin-top: 2rem;
+      border-top-left-radius: 1.2rem;
+      border-top-right-radius: 1.2rem;
+      box-shadow: 0 -2px 12px #8ec5fc22;
+    }
+    @media (max-width: 850px) {
+      section { padding: 1.3rem 0.5rem; }
+      .project-cards { gap: 1rem; }
+    }
     @media (max-width: 600px) {
-      section, .projects table { padding: 1rem; font-size: 0.95rem; }
       header h1 { font-size: 1.6rem; }
+      h2 { font-size: 1.2rem; }
+      .project-cards { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
   <header>
-    <h1>Central</h1>
+    <h1>Central Hub</h1>
     <div class="alias">by <a href="https://github.com/justdev-chris" style="color:#ffd700;">justdev-chris</a> 🐾</div>
     <nav>
       <a href="#projects">Projects</a>
@@ -42,56 +215,56 @@
     </nav>
   </header>
 
-  <section id="projects" class="projects">
+  <section id="projects">
     <h2>🚀 Project Links</h2>
-    <table>
-      <thead>
-        <tr>
-          <th>Project Name</th>
-          <th>Description</th>
-          <th>Demo / Repo</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>Ultimate Cat Clicker</td>
-          <td>Pixel-style cat-themed clicker game with adventure mode, custom skins, minigames, and achievements. Built in HTML5.</td>
-          <td>
-            <a href="https://catsdevs.online/Ultimate-Cat-Clicker/UCC/" target="_blank">Play Online</a> |
-            <a href="https://github.com/justdev-chris/Ultimate-Cat-Clicker" target="_blank">GitHub</a>
-          </td>
-        </tr>
-        <tr>
-          <td>P2E</td>
-          <td>Python to EXE converter.</td>
-          <td>
-            <a href="https://github.com/justdev-chris/P2E" target="_blank">GitHub</a>
-          </td>
-        </tr>
-        <tr>
-          <td>BAT-TO-EXE Converter</td>
-          <td>Python script to convert Windows batch files into executables. Supports GitHub Actions integration.</td>
-          <td>
-            <a href="https://github.com/justdev-chris/BAT-TO-EXE-converter" target="_blank">GitHub</a>
-          </td>
-        </tr>
-        <tr>
-          <td>TransferNest</td>
-          <td>24/7 file uploader made with HTML, CSS, JavaScript, and Node.js.</td>
-          <td>
-            <a href="https://github.com/justdev-chris/TransferNest" target="_blank">GitHub</a>
-          </td>
-        </tr>
-        <tr>
-          <td>CatObfuscator</td>
-          <td>HTML obfuscator that obfuscates your HTML into a script tag.</td>
-          <td>
-            <a href="http://catsdevs.online/CatObfuscator/" target="_blank">Demo</a> |
-            <a href="https://github.com/justdev-chris/CatObfuscator" target="_blank">GitHub</a>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="project-cards">
+      <div class="card">
+        <h3>Ultimate Cat Clicker</h3>
+        <p>Pixel-style cat-themed clicker game with adventure mode, custom skins, minigames, and achievements. Built in HTML5.</p>
+        <div class="card-links">
+          <a href="https://catsdevs.online/Ultimate-Cat-Clicker/UCC/" target="_blank">Play Online</a>
+          <a href="https://github.com/justdev-chris/Ultimate-Cat-Clicker" target="_blank">GitHub</a>
+        </div>
+      </div>
+      <div class="card">
+        <h3>P2E</h3>
+        <p>Python to EXE converter. All packages needed are injected into the EXE, but packages must be installed in workflows.</p>
+        <div class="card-links">
+          <a href="https://github.com/justdev-chris/P2E" target="_blank">GitHub</a>
+        </div>
+      </div>
+      <div class="card">
+        <h3>BAT-TO-EXE Converter</h3>
+        <p>Python script to convert Windows batch files into executables. Supports GitHub Actions integration.</p>
+        <div class="card-links">
+          <a href="https://github.com/justdev-chris/BAT-TO-EXE-converter" target="_blank">GitHub</a>
+        </div>
+      </div>
+      <div class="card">
+        <h3>TransferNest</h3>
+        <p>24/7 file uploader made with HTML, CSS, JavaScript, and Node.js.</p>
+        <div class="card-links">
+          <a href="http://catsdevs.online/TransferNest/" target="_blank">Demo</a>
+          <a href="https://github.com/justdev-chris/TransferNest" target="_blank">GitHub</a>
+        </div>
+      </div>
+      <div class="card">
+        <h3>CatObfuscator</h3>
+        <p>HTML obfuscator that obfuscates your HTML into a script tag.</p>
+        <div class="card-links">
+          <a href="http://catsdevs.online/CatObfuscator/" target="_blank">Demo</a>
+          <a href="https://github.com/justdev-chris/CatObfuscator" target="_blank">GitHub</a>
+        </div>
+      </div>
+      <div class="card">
+        <h3>GMFIXV2</h3>
+        <p>The games site for catsdevs.online ("catsdevs.online games site go brrrr").</p>
+        <div class="card-links">
+          <a href="http://catsdevs.online/GMFIXV2/" target="_blank">Demo</a>
+          <a href="https://github.com/justdev-chris/GMFIXV2" target="_blank">GitHub</a>
+        </div>
+      </div>
+    </div>
   </section>
 
   <section id="changelog" class="changelog">
@@ -102,6 +275,7 @@
       <li><strong>2025-08-12:</strong> BAT-TO-EXE Converter: Last update (see repo for details).</li>
       <li><strong>2025-09-06:</strong> TransferNest: Last update (see repo for details).</li>
       <li><strong>2025-09-17:</strong> CatObfuscator: Last update (see repo for details).</li>
+      <li><strong>2025-09-20:</strong> GMFIXV2: Last update (see repo for details).</li>
     </ul>
   </section>
 
@@ -112,10 +286,6 @@
       <li>
         <strong>Ultimate Cat Clicker:</strong>
         <a href="https://catsdevs.online/Ultimate-Cat-Clicker/UCC/" target="_blank">Play now!</a>
-      </li>
-      <li>
-        <strong>catsdevs.online games:</strong>
-        <a href="https://catsdevs.online/GMFIXV2/" target="_blank">fun games here!</a>
       </li>
     </ul>
   </section>
@@ -145,7 +315,7 @@ cd central</pre>
     <h2>🕵️ Recent Activity</h2>
     <ul>
       <li>Watch this repo and my others for updates!</li>
-      <li>Check my <a href="https://github.com/justdev-chris" target="_blank">profile</a> for news and releases.</li>
+      <li>Check the <a href="https://github.com/justdev-chris" target="_blank">justdev-chris profile</a> for news and releases.</li>
     </ul>
   </section>
 
@@ -167,7 +337,7 @@ cd central</pre>
 
   <footer>
     Made with 💻 by <strong>justdev-chris</strong><br>
-    building cool stuff since 2025
+    Building cool stuff since 2025
   </footer>
 </body>
 </html>
